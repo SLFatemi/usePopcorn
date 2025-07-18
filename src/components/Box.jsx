@@ -1,16 +1,15 @@
 import {useState} from "react";
-import MovieList from "./MovieList.jsx";
 import HideButton from "./HideButton.jsx";
 
-function ListBox({movies}) {
+function Box({children}) {
     const [isOpen, setIsOpen] = useState(true);
     return <div className="box">
         <HideButton isOpen={isOpen} setIsOpen={setIsOpen}/>
         {isOpen && (
-            <MovieList movies={movies}/>
+            children
         )}
     </div>
 
 }
 
-export default ListBox
+export default Box

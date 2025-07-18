@@ -1,6 +1,6 @@
 import WatchedMovie from "./WatchedMovie.jsx";
 
-function WatchedList({watched}) {
+function WatchedMovies({watched}) {
     return <ul className="list">
         {watched.map((movie) => (
             <WatchedMovie movie={movie} key={movie.imdbID}/>
@@ -8,4 +8,4 @@ function WatchedList({watched}) {
     </ul>
 }
 
-export default WatchedList
+export default WatchedMovies
