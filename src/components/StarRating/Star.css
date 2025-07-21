@@ -1,0 +1,9 @@
+.star {
+    width: 4.8rem;
+    height: 4.8rem;
+    display: block;
+    cursor: pointer;
+}
+
+.star svg {
+}
