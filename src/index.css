@@ -17,7 +17,7 @@
 }
 
 html {
-    font-size: 10px;
+    font-size: 10px;;
 }
 
 body {
@@ -26,6 +26,7 @@ body {
 
     color: var(--color-text);
     background-color: var(--color-background-900);
+    padding: 2.4rem;
     padding: 2.4rem;
 }
 
@@ -161,6 +162,7 @@ body {
 .list.list-movies li {
     cursor: pointer;
     transition: all 0.3s;
+    text-align: left;
 }
 
 .list.list-movies li:hover {
@@ -246,6 +248,7 @@ body {
 
 .details header {
     display: flex;
+    text-align: left;
 }
 
 .details section {
@@ -253,6 +256,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1.6rem;
+    text-align: left;
 }
 
 .details img {
