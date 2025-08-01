@@ -9,8 +9,7 @@ StarRating.propType = {
     color: PropTypes.string
 }
 
-function StarRating({maxRating = 10, size = 48, color = '#fcc419'}) {
-    const [rating, setRating] = useState(0)
+function StarRating({maxRating = 10, size = 48, color = '#fcc419', rating, setRating}) {
     const [tempRating, setTempRating] = useState(0)
 
     function handleClick(index) {

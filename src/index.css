@@ -27,7 +27,6 @@ body {
     color: var(--color-text);
     background-color: var(--color-background-900);
     padding: 2.4rem;
-    padding: 2.4rem;
 }
 
 /* ******* */
@@ -57,6 +56,12 @@ body {
     border-radius: 0.9rem;
     overflow: auto;
     position: relative;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.box::-webkit-scrollbar {
+    display: none;
 }
 
 .loader {
@@ -157,6 +162,7 @@ body {
 
     padding: 1.6rem 3.2rem;
     border-bottom: 1px solid var(--color-background-100);
+    text-align: left;
 }
 
 .list.list-movies li {

@@ -36,6 +36,14 @@ function App() {
         setSelectedID(null)
     }
 
+    function handleAddWatched(movie) {
+        setWatched((curMovies) => [...curMovies, movie])
+    }
+
+    function handleRemoveWatched(id) {
+        setWatched((curMovies) => curMovies.filter(movie => movie.imdbID !== id))
+    }
+
     useEffect(() => {
         async function getMovieDataTitle() {
             setIsLoading(true)
@@ -77,10 +85,11 @@ function App() {
                 <Box>
                     {
                         selectedID ?
-                            <SelectedMovie key={selectedID} onCloseMovie={handleCloseMovie} selectedID={selectedID}/>
+                            <SelectedMovie key={selectedID} onCloseMovie={handleCloseMovie} selectedID={selectedID}
+                                           onAddWatched={handleAddWatched} watched={watched}/>
                             : <>
                                 <WatchedSummary watched={watched}/>
-                                <WatchedMovies watched={watched}/>
+                                <WatchedMovies onRemove={handleRemoveWatched} watched={watched}/>
                             </>
                     }
                 </Box>

@@ -1,9 +1,9 @@
 import WatchedMovie from "./WatchedMovie.jsx";
 
-function WatchedMovies({watched}) {
+function WatchedMovies({watched, onRemove}) {
     return <ul className="list">
         {watched.map((movie) => (
-            <WatchedMovie movie={movie} key={movie.imdbID}/>
+            <WatchedMovie onRemove={onRemove} movie={movie} key={movie.imdbID}/>
         ))}
     </ul>
 }
