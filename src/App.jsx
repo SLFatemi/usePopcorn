@@ -24,12 +24,12 @@ function App() {
     const [error, setError] = useState('')
     const [query, setQuery] = useState("The Martian")
     const [selectedID, setSelectedID] = useState('')
-
     const debouncedQuery = useDebounce(query, 1000)
 
 
     function handleSelectMovie(id) {
         setSelectedID(selectedID === id ? null : id)
+
     }
 
     function handleCloseMovie() {
