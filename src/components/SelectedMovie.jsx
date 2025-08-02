@@ -66,6 +66,20 @@ function SelectedMovie({selectedID, onCloseMovie, onAddWatched, watched}) {
             document.title = 'usePopcorn'
         }
     }, [title]);
+
+    useEffect(() => {
+        const callBack = () => {
+            if (e.code === 'Escape') onCloseMovie()
+        }
+        document.addEventListener('keydown', callBack)
+
+        // Cleanup function!
+        return function () {
+            document.removeEventListener('keydown', callBack)
+        }
+    }, [onCloseMovie]);
+
+
     return <div className={'details'}>
         {isLoading ?
             <Loader/>

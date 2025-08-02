@@ -1,5 +1,3 @@
-import {useState} from "react";
-
 function SearchBar({query, setQuery}) {
     return <input
         className="search"
