@@ -29,6 +29,10 @@ body {
     padding: 2.4rem;
 }
 
+html, body, h1, h2, h3, h4, h5, h6, p, a, span, li, div {
+    text-align: left;
+}
+
 /* ******* */
 
 .nav-bar {
@@ -162,13 +166,13 @@ body {
 
     padding: 1.6rem 3.2rem;
     border-bottom: 1px solid var(--color-background-100);
-    text-align: left;
+    /*text-align: left;*/
 }
 
 .list.list-movies li {
     cursor: pointer;
     transition: all 0.3s;
-    text-align: left;
+    /*text-align: left;*/
 }
 
 .list.list-movies li:hover {
@@ -229,6 +233,7 @@ body {
     text-transform: uppercase;
     font-size: 1.6rem;
     margin-bottom: 0.6rem;
+    text-align: center;
 }
 
 .summary div {
@@ -254,7 +259,6 @@ body {
 
 .details header {
     display: flex;
-    text-align: left;
 }
 
 .details section {
@@ -262,7 +266,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1.6rem;
-    text-align: left;
 }
 
 .details img {

@@ -45,11 +45,13 @@ function App() {
     }
 
     useEffect(() => {
+        const controller = new AbortController()
+
         async function getMovieDataTitle() {
             setIsLoading(true)
             setError('')
             try {
-                const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${debouncedQuery}`)
+                const res = await fetch(`https://www.omdbapi.com/?apikey=${KEY}&s=${debouncedQuery}`, {signal: controller.signal})
                 if (!res.ok) throw new Error(`There was an error ${res.status}`)
 
                 const data = await res.json()
@@ -70,6 +72,11 @@ function App() {
             return
         }
         getMovieDataTitle()
+
+        return function () {
+            // Not needed
+            // controller.abort()
+        }
     }, [debouncedQuery]);
 
     return (

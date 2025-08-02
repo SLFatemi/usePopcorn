@@ -39,7 +39,7 @@ function SelectedMovie({selectedID, onCloseMovie, onAddWatched, watched}) {
         async function getMovieDetails() {
             setIsLoading(true)
             try {
-                const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&i=${selectedID}`)
+                const res = await fetch(`https://www.omdbapi.com/?apikey=${KEY}&i=${selectedID}`)
                 if (!res.ok) throw new Error(`There was an error ${res.status}`)
 
                 const data = await res.json()
@@ -66,6 +66,20 @@ function SelectedMovie({selectedID, onCloseMovie, onAddWatched, watched}) {
             document.title = 'usePopcorn'
         }
     }, [title]);
+
+    useEffect(() => {
+        const callBack = () => {
+            if (e.code === 'Escape') onCloseMovie()
+        }
+        document.addEventListener('keydown', callBack)
+
+        // Cleanup function!
+        return function () {
+            document.removeEventListener('keydown', callBack)
+        }
+    }, [onCloseMovie]);
+
+
     return <div className={'details'}>
         {isLoading ?
             <Loader/>
