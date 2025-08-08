@@ -19,13 +19,13 @@ const KEY = '53814bf8';
 function App() {
 
     const [movies, setMovies] = useState([]);
-    const [watched, setWatched] = useState([]);
+    const [watched, setWatched] = useState(() => JSON.parse(localStorage.getItem('watched')) ?? [])
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState('')
     const [query, setQuery] = useState("The Martian")
     const [selectedID, setSelectedID] = useState('')
-    const debouncedQuery = useDebounce(query, 1000)
 
+    const debouncedQuery = useDebounce(query, 1000)
 
     function handleSelectMovie(id) {
         setSelectedID(selectedID === id ? null : id)
@@ -43,6 +43,10 @@ function App() {
     function handleRemoveWatched(id) {
         setWatched((curMovies) => curMovies.filter(movie => movie.imdbID !== id))
     }
+
+    useEffect(() => {
+        localStorage.setItem('watched', JSON.stringify(watched))
+    }, [watched]);
 
     useEffect(() => {
         const controller = new AbortController()

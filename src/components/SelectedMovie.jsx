@@ -5,9 +5,12 @@ import Loader from "./Loader.jsx";
 const KEY = '53814bf8';
 
 function SelectedMovie({selectedID, onCloseMovie, onAddWatched, watched}) {
-    const [rating, setRating] = useState(0)
+    const [userRating, setUserRating] = useState(0)
     const [movie, setMovie] = useState({})
     const [isLoading, setIsLoading] = useState(false)
+    const [avgRating, setAvgRating] = useState(0)
+
+
     const {
         Title: title,
         Year: year,
@@ -29,9 +32,9 @@ function SelectedMovie({selectedID, onCloseMovie, onAddWatched, watched}) {
             poster,
             imdbRating: +imdbRating,
             runtime: +runtime.split(' ').at(0),
-            userRating: rating
+            userRating: userRating
         }
-        onCloseMovie()
+        // onCloseMovie()
         onAddWatched(newMovie)
     }
 
@@ -102,8 +105,8 @@ function SelectedMovie({selectedID, onCloseMovie, onAddWatched, watched}) {
                             a ⭐ {watched.filter(movie => movie.imdbID === selectedID)?.at(0).userRating}/10
                         </div> :
                         <div className={'rating'}>
-                            <StarRating rating={rating} setRating={setRating} maxRating={10} size={24}/>
-                            {rating > 0 && <button onClick={handleAdd} className={'btn-add'}>+ Add to list</button>}
+                            <StarRating rating={userRating} setRating={setUserRating} maxRating={10} size={24}/>
+                            {userRating > 0 && <button onClick={handleAdd} className={'btn-add'}>+ Add to list</button>}
                         </div>}
                     <p><em>{plot}</em></p>
                     <p>Starring {actors}</p>
