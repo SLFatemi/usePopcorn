@@ -71,7 +71,7 @@ function SelectedMovie({selectedID, onCloseMovie, onAddWatched, watched}) {
     }, [title]);
 
     useEffect(() => {
-        const callBack = () => {
+        const callBack = (e) => {
             if (e.code === 'Escape') onCloseMovie()
         }
         document.addEventListener('keydown', callBack)
