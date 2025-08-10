@@ -11,25 +11,22 @@ import WatchedSummary from "./components/WatchedSummary.jsx";
 import Loader from "./components/Loader.jsx";
 import ErrorMessage from "./components/ErrorMessage.jsx";
 import SelectedMovie from "./components/SelectedMovie.jsx";
-
-
-const KEY = '53814bf8';
+import {useMovies} from "./hooks/useMovies.jsx";
+import {useLocalStorage} from "./hooks/useLocalStorage.jsx";
 
 
 function App() {
 
-    const [movies, setMovies] = useState([]);
-    const [watched, setWatched] = useState(() => JSON.parse(localStorage.getItem('watched')) ?? [])
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState('')
     const [query, setQuery] = useState("The Martian")
     const [selectedID, setSelectedID] = useState('')
 
     const debouncedQuery = useDebounce(query, 1000)
 
+    const [movies, isLoading, error] = useMovies(debouncedQuery)
+    const [watched, setWatched] = useLocalStorage('watched')
+    
     function handleSelectMovie(id) {
         setSelectedID(selectedID === id ? null : id)
-
     }
 
     function handleCloseMovie() {
@@ -44,44 +41,6 @@ function App() {
         setWatched((curMovies) => curMovies.filter(movie => movie.imdbID !== id))
     }
 
-    useEffect(() => {
-        localStorage.setItem('watched', JSON.stringify(watched))
-    }, [watched]);
-
-    useEffect(() => {
-        const controller = new AbortController()
-
-        async function getMovieDataTitle() {
-            setIsLoading(true)
-            setError('')
-            try {
-                const res = await fetch(`https://www.omdbapi.com/?apikey=${KEY}&s=${debouncedQuery}`, {signal: controller.signal})
-                if (!res.ok) throw new Error(`There was an error ${res.status}`)
-
-                const data = await res.json()
-
-                if (data.Response === 'False') throw new Error(`${data.Error}`)
-
-                setMovies(data.Search)
-            } catch (e) {
-                setError(e.message)
-            } finally {
-                setIsLoading(false)
-            }
-            return null
-        }
-
-        if (!debouncedQuery || debouncedQuery.length < 3) {
-            setMovies([])
-            return
-        }
-        getMovieDataTitle()
-
-        return function () {
-            // Not needed
-            // controller.abort()
-        }
-    }, [debouncedQuery]);
 
     return (
         <>
