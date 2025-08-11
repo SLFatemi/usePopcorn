@@ -1,53 +1,51 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
-const KEY = '53814bf8';
+const KEY = "53814bf8";
 
 function useMovies(query) {
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState("");
+	const [movies, setMovies] = useState([]);
 
+	useEffect(() => {
+		const controller = new AbortController();
 
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState('')
-    const [movies, setMovies] = useState([]);
+		async function getMovieDataTitle() {
+			setIsLoading(true);
+			setError("");
+			try {
+				const res = await fetch(
+					`https://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+					{ signal: controller.signal },
+				);
+				if (!res.ok) throw new Error(`There was an error ${res.status}`);
 
-    useEffect(() => {
-        const controller = new AbortController()
+				const data = await res.json();
 
-        async function getMovieDataTitle() {
-            setIsLoading(true)
-            setError('')
-            try {
-                const res = await fetch(`https://www.omdbapi.com/?apikey=${KEY}&s=${query}`, {signal: controller.signal})
-                if (!res.ok) throw new Error(`There was an error ${res.status}`)
+				if (data.Response === "False") throw new Error(`${data.Error}`);
 
-                const data = await res.json()
+				setMovies(data.Search);
+			} catch (e) {
+				setError(e.message);
+			} finally {
+				setIsLoading(false);
+			}
+			return null;
+		}
 
-                if (data.Response === 'False') throw new Error(`${data.Error}`)
+		if (!query || query.length < 3) {
+			setMovies([]);
+			return;
+		}
+		getMovieDataTitle();
 
-                setMovies(data.Search)
-            } catch (e) {
-                setError(e.message)
-            } finally {
-                setIsLoading(false)
-            }
-            return null
-        }
+		return () => {
+			// Not needed
+			// controller.abort();
+		};
+	}, [query]);
 
-        if (!query || query.length < 3) {
-            setMovies([])
-            return
-        }
-        getMovieDataTitle()
-
-        return function () {
-            // Not needed
-            // controller.abort()
-        }
-    }, [query]);
-
-    return [movies, isLoading, error]
+	return [movies, isLoading, error];
 }
 
-export {useMovies}
-
-
-
+export { useMovies };

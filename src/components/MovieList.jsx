@@ -1,12 +1,13 @@
 import Movie from "./Movie.jsx";
 
-function MovieList({movies, onSelectMovie}) {
-    return <ul className="list list-movies">
-        {movies?.map((movie) => (
-            <Movie movie={movie} key={movie.imdbID} onSelectMovie={onSelectMovie}/>
-        ))}
-    </ul>
-
+function MovieList({ movies, onSelectMovie }) {
+	return (
+		<ul className="list list-movies">
+			{movies?.map((movie) => (
+				<Movie movie={movie} key={movie.imdbID} onSelectMovie={onSelectMovie} />
+			))}
+		</ul>
+	);
 }
 
-export default MovieList
+export default MovieList;

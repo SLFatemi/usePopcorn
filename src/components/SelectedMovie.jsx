@@ -1,115 +1,149 @@
-import {useEffect, useRef, useState} from "react";
-import StarRating from "./StarRating/StarRating.jsx";
+import { useEffect, useRef, useState } from "react";
+import { useKey } from "../hooks/useKey.jsx";
 import Loader from "./Loader.jsx";
-import {useKey} from "../hooks/useKey.jsx";
+import StarRating from "./StarRating/StarRating.jsx";
 
-const KEY = '53814bf8';
+const KEY = "53814bf8";
 
-function SelectedMovie({selectedID, onCloseMovie, onAddWatched, watched}) {
-    const [userRating, setUserRating] = useState(0)
-    const [isLoading, setIsLoading] = useState(false)
-    const [movie, setMovie] = useState({})
+function SelectedMovie({ selectedID, onCloseMovie, onAddWatched, watched }) {
+	const [userRating, setUserRating] = useState(0);
+	const [isLoading, setIsLoading] = useState(false);
+	const [movie, setMovie] = useState({});
 
-    const countRef = useRef(0)
+	const countRef = useRef(0);
 
-    useEffect(() => {
-        if (userRating) countRef.current++
-    }, [userRating]);
+	useEffect(() => {
+		if (userRating) countRef.current++;
+	}, [userRating]);
 
-    const {
-        Title: title,
-        Year: year,
-        Poster: poster,
-        imdbRating,
-        Plot: plot,
-        Runtime: runtime,
-        Released: released,
-        Actors: actors,
-        Director: director,
-        Genre: genre
-    } = movie
+	const {
+		Title: title,
+		Year: year,
+		Poster: poster,
+		imdbRating,
+		Plot: plot,
+		Runtime: runtime,
+		Released: released,
+		Actors: actors,
+		Director: director,
+		Genre: genre,
+	} = movie;
 
-    function handleAdd() {
-        const newMovie = {
-            imdbID: selectedID,
-            title,
-            year,
-            poster,
-            imdbRating: +imdbRating,
-            runtime: +runtime.split(' ').at(0),
-            userRating: userRating,
-            countRatingDecisions: countRef.current,
-        }
-        onCloseMovie()
-        onAddWatched(newMovie)
-    }
+	function handleAdd() {
+		const newMovie = {
+			imdbID: selectedID,
+			title,
+			year,
+			poster,
+			imdbRating: +imdbRating,
+			runtime: +runtime.split(" ").at(0),
+			userRating: userRating,
+			countRatingDecisions: countRef.current,
+		};
+		onCloseMovie();
+		onAddWatched(newMovie);
+	}
 
-    useEffect(() => {
-        async function getMovieDetails() {
-            setIsLoading(true)
-            try {
-                const res = await fetch(`https://www.omdbapi.com/?apikey=${KEY}&i=${selectedID}`)
-                if (!res.ok) throw new Error(`There was an error ${res.status}`)
+	useEffect(() => {
+		async function getMovieDetails() {
+			setIsLoading(true);
+			try {
+				const res = await fetch(
+					`https://www.omdbapi.com/?apikey=${KEY}&i=${selectedID}`,
+				);
+				if (!res.ok) throw new Error(`There was an error ${res.status}`);
 
-                const data = await res.json()
-                if (data.Response === 'False') throw new Error(`${data.Error}`)
+				const data = await res.json();
+				if (data.Response === "False") throw new Error(`${data.Error}`);
 
-                setMovie(data)
-            } catch (e) {
-                console.error(e)
-            } finally {
-                setIsLoading(false)
-            }
-            return null
-        }
+				setMovie(data);
+			} catch (e) {
+				console.error(e);
+			} finally {
+				setIsLoading(false);
+			}
+			return null;
+		}
 
-        getMovieDetails()
+		getMovieDetails();
+	}, [selectedID]);
+	useEffect(() => {
+		if (!title) return;
+		document.title = `Movie | ${title}`;
 
-    }, [selectedID]);
+		return () => {
+			document.title = "usePopcorn";
+		};
+	}, [title]);
 
-    useEffect(() => {
-        if (!title) return
-        document.title = `Movie | ${title}`
+	useKey("Escape  ", onCloseMovie);
 
-        return function () {
-            document.title = 'usePopcorn'
-        }
-    }, [title]);
-
-    useKey('Escape  ', onCloseMovie)
-
-    return <div className={'details'}>
-        {isLoading ?
-            <Loader/>
-            :
-            <>
-                <header>
-                    <button className={'btn-back'} onClick={onCloseMovie}>&larr;</button>
-                    <img src={poster} alt={`poster of ${title}`}/>
-                    <div className="details-overview">
-                        <h2>{title}</h2>
-                        <p>{released} &bull; {runtime}</p>
-                        <p>{genre}</p>
-                        <p><span>⭐</span>{imdbRating}</p>
-                    </div>
-                </header>
-                <section>
-                    {watched.some((movie) => movie.imdbID === selectedID) ?
-                        <div className={'rating'}>
-                            You rated this movie
-                            a ⭐ {watched.filter(movie => movie.imdbID === selectedID)?.at(0).userRating}/10
-                        </div> :
-                        <div className={'rating'}>
-                            <StarRating rating={userRating} setRating={setUserRating} maxRating={10} size={24}/>
-                            {userRating > 0 && <button onClick={handleAdd} className={'btn-add'}>+ Add to list</button>}
-                        </div>}
-                    <p><em>{plot}</em></p>
-                    <p>Starring {actors}</p>
-                    <p>Directed by {director}</p>
-                </section>
-            </>}
-    </div>
+	return (
+		<div className={"details"}>
+			{isLoading ? (
+				<Loader />
+			) : (
+				<>
+					<header>
+						<button
+							type={"button"}
+							className={"btn-back"}
+							onClick={onCloseMovie}
+						>
+							&larr;
+						</button>
+						<img src={poster} alt={`poster of ${title}`} />
+						<div className="details-overview">
+							<h2>{title}</h2>
+							<p>
+								{released} &bull; {runtime}
+							</p>
+							<p>{genre}</p>
+							<p>
+								<span>⭐</span>
+								{imdbRating}
+							</p>
+						</div>
+					</header>
+					<section>
+						{watched.some((movie) => movie.imdbID === selectedID) ? (
+							<div className={"rating"}>
+								You rated this movie a ⭐{" "}
+								{
+									watched.filter((movie) => movie.imdbID === selectedID)?.at(0)
+										.userRating
+								}
+								/10
+							</div>
+						) : (
+							<div className={"rating"}>
+								<StarRating
+									rating={userRating}
+									setRating={setUserRating}
+									maxRating={10}
+									size={24}
+								/>
+								{userRating > 0 && (
+									<button
+										type={"button"}
+										onClick={handleAdd}
+										className={"btn-add"}
+									>
+										+ Add to list
+									</button>
+								)}
+							</div>
+						)}
+						<p>
+							<em>{plot}</em>
+						</p>
+						<p>Starring {actors}</p>
+						<p>Directed by {director}</p>
+					</section>
+				</>
+			)}
+		</div>
+	);
 }
 
-export default SelectedMovie
-
+export default SelectedMovie;
